@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V2 Usability Testing Report — Credit Direct</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+/* ─── CDL DESIGN TOKENS ─────────────────────────────────────────────────── */
+:root {
+  /* Primitives → brand */
+  --blue-300: #92CDED;   /* CD Blue/400 — readable on dark */
+  --blue-400: #4AACE1;   /* CD Blue/500 — brand accent */
+  --maroon:   #B10031;   /* Maroon/500 — primary brand */
+
+  /* Jet Black scale (dark bg) */
+  --jb-900: #10161C;
+  --jb-800: #161E25;
+  --jb-700: #1B252E;
+  --jb-600: #21303C;
+
+  /* Grey scale */
+  --grey-50:  #FCFCFC;
+  --grey-600: #B0B3B6;
+  --grey-700: #888D91;
+  --grey-800: #61676C;
+
+  /* Semantic */
+  --error:   #E53935;   /* Error/200 */
+  --warning: #FFB821;   /* Warning/200 */
+  --success: #5AA839;   /* Success/200 */
+
+  /* ── Page tokens ── */
+  --bg:        var(--jb-900);
+  --bg2:       var(--jb-800);
+  --surface:   var(--jb-700);
+  --card:      var(--jb-600);
+  --border:    rgba(255,255,255,.06);
+  --border2:   rgba(74,172,225,.18);
+
+  --text:      #EEF4F8;
+  --text2:     var(--grey-600);
+  --text3:     var(--grey-700);
+
+  --accent:        var(--blue-300);
+  --accent-bg:     rgba(74,172,225,.08);
+  --accent-border: rgba(74,172,225,.18);
+
+  --critical:      var(--error);
+  --critical-bg:   rgba(229,57,53,.07);
+  --major:         var(--warning);
+  --major-bg:      rgba(255,184,33,.07);
+  --minor:         var(--grey-700);
+  --minor-bg:      rgba(136,141,145,.07);
+  --green-bg:      rgba(90,168,57,.07);
+
+  --nav: 56px;
+
+  /* Typography — Figtree (CDL secondary digital typeface) */
+  --font: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
+  --ls-tight: -0.03em;
+  --ls-display: -0.04em;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── PROGRESS BAR ──────────────────────────────────────────────────────── */
+#bar{
+  position:fixed;top:0;left:0;height:2px;
+  background: linear-gradient(90deg, var(--maroon), var(--blue-400));
+  z-index:200;width:0%;transition:width .1s linear;pointer-events:none;
+}
+
+/* ─── NAV ───────────────────────────────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;height:var(--nav);
+  background:rgba(16,22,28,.92);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  z-index:100;display:flex;align-items:center;padding:0 32px;gap:8px;
+}
+.nav-brand{
+  font-size:11px;font-weight:800;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--accent);margin-right:auto;white-space:nowrap;
+}
+.nav-links{display:flex;gap:2px;list-style:none}
+.nav-links a{
+  font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;
+  padding:6px 10px;border-radius:6px;transition:color .15s,background .15s;white-space:nowrap;
+}
+.nav-links a:hover,.nav-links a.active{color:var(--accent);background:rgba(74,172,225,.06)}
+
+/* ─── LAYOUT ────────────────────────────────────────────────────────────── */
+.wrap{max-width:980px;margin:0 auto;padding:0 32px}
+
+/* ─── HERO ──────────────────────────────────────────────────────────────── */
+#hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  justify-content:flex-end;
+  padding:calc(var(--nav) + 80px) 0 88px;
+  position:relative;overflow:hidden;
+}
+.hero-glow{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 50% at 70% 30%, rgba(74,172,225,.06) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 40% at 10% 80%, rgba(177,0,49,.05) 0%, transparent 60%);
+}
+/* big decorative "01" behind hero */
+.hero-num{
+  position:absolute;right:-40px;bottom:-20px;
+  font-size:clamp(200px,28vw,420px);font-weight:900;
+  letter-spacing:var(--ls-display);line-height:1;
+  color:rgba(255,255,255,.018);user-select:none;pointer-events:none;
+}
+.overline{
+  font-size:11px;font-weight:800;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--accent);margin-bottom:20px;
+}
+.hero-title{
+  font-size:clamp(44px,7.5vw,108px);font-weight:900;
+  line-height:.96;letter-spacing:var(--ls-display);margin-bottom:28px;
+}
+.hero-title em{font-style:normal;color:var(--accent)}
+.hero-sub{
+  font-size:18px;color:var(--text2);max-width:580px;
+  line-height:1.72;margin-bottom:44px;font-weight:400;
+}
+.chips{display:flex;gap:10px;flex-wrap:wrap}
+.chip{
+  font-size:12px;font-weight:600;color:var(--text2);
+  background:var(--surface);border:1px solid var(--border);
+  padding:6px 14px;border-radius:100px;
+}
+.scroll-cue{
+  position:absolute;bottom:28px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  color:var(--text3);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  animation:float 2.2s ease-in-out infinite;
+}
+@keyframes float{
+  0%,100%{transform:translateX(-50%) translateY(0)}
+  50%{transform:translateX(-50%) translateY(7px)}
+}
+
+/* ─── SECTION BANDS ─────────────────────────────────────────────────────── */
+.band{
+  background:var(--bg2);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  padding:80px 0;position:relative;overflow:hidden;
+}
+.band-num{
+  position:absolute;right:-20px;top:50%;transform:translateY(-50%);
+  font-size:clamp(110px,17vw,240px);font-weight:900;
+  color:rgba(255,255,255,.02);letter-spacing:var(--ls-display);
+  line-height:1;user-select:none;pointer-events:none;
+}
+.s-label{
+  font-size:11px;font-weight:800;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--accent);margin-bottom:14px;
+}
+.s-title{
+  font-size:clamp(38px,5.5vw,76px);font-weight:900;
+  letter-spacing:var(--ls-display);line-height:.96;margin-bottom:20px;
+}
+.s-desc{font-size:16px;color:var(--text2);max-width:580px;line-height:1.72}
+
+/* ─── SECTIONS ──────────────────────────────────────────────────────────── */
+.sec{padding:80px 0}
+.sec-alt{padding:80px 0;background:var(--bg2)}
+.sec-head{margin-bottom:48px}
+.sec-head-title{
+  font-size:clamp(24px,3.5vw,40px);font-weight:900;
+  letter-spacing:var(--ls-tight);margin-bottom:8px;
+}
+.sec-head-sub{font-size:15px;color:var(--text2);line-height:1.72;max-width:620px}
+
+/* ─── CARDS ─────────────────────────────────────────────────────────────── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:32px;
+}
+.c-label{
+  font-size:10px;font-weight:800;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--accent);margin-bottom:14px;
+}
+.c-body{font-size:15px;color:var(--text2);line-height:1.75}
+
+/* ─── TESTED GRID ───────────────────────────────────────────────────────── */
+.tested-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:var(--border);border:1px solid var(--border);
+  border-radius:14px;overflow:hidden;margin-bottom:56px;
+}
+.t-cell{background:var(--card);padding:22px 20px;transition:background .12s}
+.t-cell:hover{background:var(--surface)}
+.t-name{font-size:13px;font-weight:700;margin-bottom:5px}
+.t-desc{font-size:12px;color:var(--text2);line-height:1.5}
+.t-cell.filler{background:var(--bg2)}
+
+/* ─── WHO ───────────────────────────────────────────────────────────────── */
+.who-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+.stat-n{
+  font-size:72px;font-weight:900;letter-spacing:var(--ls-display);
+  color:var(--accent);line-height:1;margin-bottom:4px;
+}
+.stat-l{font-size:15px;font-weight:700;margin-bottom:12px}
+.stat-d{font-size:14px;color:var(--text2);line-height:1.72;margin-bottom:20px}
+.mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.mini-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:18px;
+}
+.mini-label{
+  font-size:10px;font-weight:800;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--text3);margin-bottom:10px;
+}
+.dot-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+.dot-list li{font-size:13px;color:var(--text2);padding-left:14px;position:relative;line-height:1.5}
+.dot-list li::before{
+  content:'';position:absolute;left:0;top:7px;
+  width:4px;height:4px;border-radius:50%;background:var(--accent);
+}
+
+/* ─── EXEC SUMMARY ──────────────────────────────────────────────────────── */
+.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:48px}
+.sum-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:22px 24px;display:flex;gap:16px;
+}
+.sum-card.wide{grid-column:1/-1}
+.sum-n{
+  font-size:28px;font-weight:900;letter-spacing:var(--ls-tight);
+  color:var(--accent);line-height:1;flex-shrink:0;width:36px;padding-top:2px;
+}
+.sum-t{font-size:15px;color:var(--text2);line-height:1.72}
+
+/* ─── WHAT WORKED ───────────────────────────────────────────────────────── */
+.worked-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.w-chip{
+  background:var(--green-bg);
+  border:1px solid rgba(90,168,57,.15);border-radius:10px;padding:16px;
+}
+.w-name{font-size:13px;font-weight:700;color:var(--success);margin-bottom:5px}
+.w-desc{font-size:12px;color:var(--text2);line-height:1.5}
+
+/* ─── FINDING CARDS ─────────────────────────────────────────────────────── */
+.findings-stack{display:flex;flex-direction:column;gap:20px}
+.f-screens{
+  display:flex;gap:16px;align-items:flex-end;justify-content:center;
+  padding:24px 30px;border-top:1px solid var(--border);
+  background:var(--surface);flex-wrap:wrap;
+}
+.f-screens img{
+  max-height:300px;width:auto;max-width:100%;
+  border-radius:20px;
+  box-shadow:0 4px 24px rgba(0,0,0,.45);
+  border:1px solid rgba(255,255,255,.08);
+}
+.f-screens-vs{
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center;
+}
+.f-screens-vs .vs-label{
+  font-size:11px;font-weight:900;letter-spacing:.14em;
+  color:var(--text3);text-transform:uppercase;flex-shrink:0;
+}
+.finding{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;overflow:hidden;
+  transition:border-color .15s;
+}
+.finding:hover{border-color:var(--accent-border)}
+.f-head{
+  padding:26px 30px 20px;border-bottom:1px solid var(--border);
+  display:flex;gap:20px;align-items:flex-start;
+}
+.f-num{
+  font-size:13px;font-weight:900;letter-spacing:.04em;
+  color:var(--accent);flex-shrink:0;padding-top:2px;
+  font-variant-numeric:tabular-nums;
+}
+.f-head-text{}
+.f-tag{
+  font-size:10px;font-weight:800;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--text3);margin-bottom:6px;
+}
+.f-title{
+  font-size:clamp(17px,2vw,24px);font-weight:800;
+  letter-spacing:var(--ls-tight);line-height:1.25;
+}
+.f-body{display:grid;grid-template-columns:1fr 1fr 1fr}
+.f-col{padding:22px 26px;border-right:1px solid var(--border)}
+.f-col:last-child{border-right:none}
+.f-col-label{
+  font-size:10px;font-weight:800;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--text3);margin-bottom:10px;
+}
+.f-text{font-size:14px;color:var(--text2);line-height:1.72}
+.ev-list{list-style:none;display:flex;flex-direction:column;gap:9px}
+.ev-list li{font-size:13px;color:var(--text2);padding-left:14px;position:relative;line-height:1.6}
+.ev-list li::before{
+  content:'"';position:absolute;left:0;top:-1px;
+  color:var(--accent);font-size:15px;font-weight:900;line-height:1.5;
+}
+.why-text{font-size:14px;color:var(--text);font-weight:600;line-height:1.72}
+
+/* ─── PRIORITY ISSUES ───────────────────────────────────────────────────── */
+.issues-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+.i-col{border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.i-head{
+  padding:14px 18px;display:flex;align-items:baseline;gap:10px;
+  border-bottom:1px solid var(--border);
+}
+.i-col.crit .i-head{background:var(--critical-bg);border-bottom:1px solid rgba(229,57,53,.1)}
+.i-col.maj  .i-head{background:var(--major-bg);border-bottom:1px solid rgba(255,184,33,.1)}
+.i-col.min  .i-head{background:var(--minor-bg);border-bottom:1px solid rgba(136,141,145,.1)}
+.i-col-title{font-size:13px;font-weight:800;letter-spacing:.02em}
+.i-col.crit .i-col-title{color:var(--critical)}
+.i-col.maj  .i-col-title{color:var(--major)}
+.i-col.min  .i-col-title{color:var(--minor)}
+.i-col-tag{
+  font-size:10px;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--text3);
+}
+.i-list{list-style:none;background:var(--card)}
+.i-item{padding:14px 18px;border-bottom:1px solid var(--border)}
+.i-item:last-child{border-bottom:none}
+.i-name{font-size:13px;font-weight:700;line-height:1.4;margin-bottom:4px}
+.i-why{font-size:12px;color:var(--text2);line-height:1.5}
+
+/* ─── RECS ──────────────────────────────────────────────────────────────── */
+.recs-group{margin-bottom:52px}
+.rg-head{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.rg-badge{
+  font-size:10px;font-weight:800;letter-spacing:.14em;
+  text-transform:uppercase;padding:5px 12px;border-radius:100px;
+}
+.rg-badge.now{
+  background:var(--accent-bg);color:var(--accent);
+  border:1px solid var(--accent-border);
+}
+.rg-badge.next{
+  background:var(--surface);color:var(--text2);
+  border:1px solid var(--border);
+}
+.rg-title{font-size:15px;font-weight:700}
+.recs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.rec{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:22px;transition:border-color .15s;
+}
+.rec:hover{border-color:var(--accent-border)}
+.rec-n{
+  font-size:11px;font-weight:900;color:var(--accent);
+  margin-bottom:9px;letter-spacing:.06em;
+}
+.rec-title{font-size:14px;font-weight:700;margin-bottom:12px;line-height:1.4}
+.rec-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+.rec-list li{
+  font-size:13px;color:var(--text2);padding-left:14px;
+  position:relative;line-height:1.5;
+}
+.rec-list li::before{
+  content:'→';position:absolute;left:0;
+  color:var(--text3);font-size:10px;top:2px;
+}
+
+/* ─── NEXT STEPS ────────────────────────────────────────────────────────── */
+.ns-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:72px}
+.ns-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:30px;display:flex;gap:20px;
+  transition:border-color .15s;
+}
+.ns-card:hover{border-color:var(--accent-border)}
+.ns-n{
+  font-size:42px;font-weight:900;letter-spacing:var(--ls-display);
+  color:var(--accent);line-height:1;flex-shrink:0;width:52px;
+}
+.ns-ttl{font-size:15px;font-weight:700;margin-bottom:8px}
+.ns-desc{font-size:14px;color:var(--text2);line-height:1.72}
+
+/* ─── FOOTER ────────────────────────────────────────────────────────────── */
+footer{border-top:1px solid var(--border);padding:28px 0;text-align:center}
+footer p{font-size:12px;color:var(--text3);font-weight:500}
+
+/* ─── RESPONSIVE ────────────────────────────────────────────────────────── */
+@media(max-width:800px){
+  .two-col,.who-grid,.sum-grid,.issues-grid,.recs-grid,.ns-grid,.f-body{
+    grid-template-columns:1fr
+  }
+  .worked-grid{grid-template-columns:repeat(2,1fr)}
+  .tested-grid{grid-template-columns:repeat(2,1fr)}
+  .sum-card.wide{grid-column:1}
+  .mini-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+}
+@media(max-width:480px){
+  .tested-grid,.worked-grid{grid-template-columns:1fr}
+  .wrap{padding:0 18px}
+}
+</style>
+</head>
+<body>
+
+<div id="bar"></div>
+
+<nav>
+  <span class="nav-brand">Credit Direct · UX Research</span>
+  <ul class="nav-links">
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#methodology">Methodology</a></li>
+    <li><a href="#summary">Summary</a></li>
+    <li><a href="#findings">Findings</a></li>
+    <li><a href="#issues">Issues</a></li>
+    <li><a href="#recommendations">Recommendations</a></li>
+    <li><a href="#next-steps">Next Steps</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ──────────────────────────────────────────────────────────────── -->
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-num" aria-hidden="true">V2</div>
+  <div class="wrap" style="position:relative;z-index:1">
+    <p class="overline">Credit Direct · UX Research</p>
+    <h1 class="hero-title">V2 Mobile App<br><em>Usability Testing</em></h1>
+    <p class="hero-sub">Key findings, priority issues, and recommendations from prototype testing of the CDL Mobile App.</p>
+    <div class="chips">
+      <span class="chip">Prepared for Product, Design &amp; Leadership</span>
+      <span class="chip">By Martha Adeleke</span>
+      <span class="chip">5 Participants · 9 Flows Tested</span>
+    </div>
+  </div>
+  <div class="scroll-cue" aria-hidden="true">
+    <span>Scroll</span>
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M7 2v10M3 8l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ── OVERVIEW ───────────────────────────────────────────────────────────── -->
+<section class="sec" id="overview">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="s-label">01 — Overview</p>
+      <h2 class="sec-head-title">Background</h2>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <p class="c-label">Context</p>
+        <p class="c-body">The CDL Mobile App is being redesigned in V2 to simplify everyday financial tasks — airtime, data, bills, transfers, and statements. Before shipping the next iteration, we tested the prototype with five users to validate the bill payment and transfer flows, surface friction, and prioritise what to fix.</p>
+      </div>
+      <div class="card">
+        <p class="c-label">Why this report exists</p>
+        <ul class="dot-list">
+          <li>Show what the V2 design gets right today.</li>
+          <li>Surface the patterns that appeared across multiple sessions, not one-off opinions.</li>
+          <li>Give product, design, and leadership a clear list of what to fix now versus next.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── METHODOLOGY ────────────────────────────────────────────────────────── -->
+<section class="sec-alt" id="methodology">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="s-label">02 — Methodology</p>
+      <h2 class="sec-head-title">What we tested</h2>
+      <p class="sec-head-sub">Nine core flows across the V2 prototype. For airtime and transfer we compared two route options (Route 1 vs Route 2) to see which path users preferred.</p>
+    </div>
+    <div class="tested-grid">
+      <div class="t-cell"><p class="t-name">Airtime &amp; data</p><p class="t-desc">Two routes tested side by side.</p></div>
+      <div class="t-cell"><p class="t-name">Electricity bill payment</p><p class="t-desc">Meter type, meter number, payment.</p></div>
+      <div class="t-cell"><p class="t-name">Betting wallet funding</p><p class="t-desc">Top-up flow and success feedback.</p></div>
+      <div class="t-cell"><p class="t-name">Transfers</p><p class="t-desc">Two routes, plus AI-assisted transfer.</p></div>
+      <div class="t-cell"><p class="t-name">Beneficiaries</p><p class="t-desc">Adding new and selecting top beneficiaries.</p></div>
+      <div class="t-cell"><p class="t-name">Transaction history</p><p class="t-desc">Browsing, filtering, revisiting.</p></div>
+      <div class="t-cell"><p class="t-name">Bank statement</p><p class="t-desc">Requesting, custom range, output options.</p></div>
+      <div class="t-cell"><p class="t-name">Receipts</p><p class="t-desc">Viewing and sharing transaction receipts.</p></div>
+      <div class="t-cell filler"><p class="t-name" style="color:var(--text2)">9 flows total</p><p class="t-desc">Moderated prototype walkthrough</p></div>
+    </div>
+
+    <h3 class="sec-head-title" style="font-size:clamp(22px,3vw,34px);margin-bottom:28px">Who we tested with</h3>
+    <div class="who-grid">
+      <div>
+        <div class="stat-n">5</div>
+        <p class="stat-l">Participants</p>
+        <p class="stat-d">Mixed levels of experience with mobile financial apps. Most had used at least one of: Opay, Moniepoint, PalmPay, Cowrywise, Access, Piggyvest, or Pocket App. One participant had never used an app of this kind before.</p>
+        <p style="font-size:14px;color:var(--text2);line-height:1.72"><strong style="color:var(--text)">Why this mix:</strong> The group covers both confident and first-time users of financial apps, so findings reflect a real range of behaviour rather than only experienced power users.</p>
+      </div>
+      <div class="mini-grid" style="align-content:start">
+        <div class="mini-card">
+          <p class="mini-label">Method</p>
+          <ul class="dot-list">
+            <li>Moderated prototype walkthrough</li>
+            <li>Think-aloud while completing each flow</li>
+            <li>Route comparison for airtime and transfer</li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <p class="mini-label">What we listened for</p>
+          <ul class="dot-list">
+            <li>Where users hesitated or got stuck</li>
+            <li>Patterns that repeated across sessions</li>
+            <li>Trust and confirmation moments</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── EXEC SUMMARY ───────────────────────────────────────────────────────── -->
+<section class="sec" id="summary">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="s-label">04 — Executive Summary</p>
+      <h2 class="sec-head-title">Five things to take away</h2>
+    </div>
+    <div class="sum-grid">
+      <div class="sum-card"><span class="sum-n">01</span><p class="sum-t">Most core flows worked. Airtime, data, electricity, transaction history and parts of transfer were easy to complete.</p></div>
+      <div class="sum-card"><span class="sum-n">02</span><p class="sum-t">Route 2 was preferred for airtime and transfer because it cut manual entry and showed options up front.</p></div>
+      <div class="sum-card"><span class="sum-n">03</span><p class="sum-t">Copy and feedback mismatches in electricity and betting are eroding trust on screens that involve money.</p></div>
+      <div class="sum-card"><span class="sum-n">04</span><p class="sum-t">Add new beneficiary, top beneficiaries, and bank statement entry points are not discoverable enough.</p></div>
+      <div class="sum-card wide"><span class="sum-n">05</span><p class="sum-t">Users want clearer confirmation and explicit control before any payment, especially in electricity, transfer, and AI-assisted transfer.</p></div>
+    </div>
+    <h3 style="font-size:17px;font-weight:800;margin-bottom:6px">What worked well</h3>
+    <p style="font-size:14px;color:var(--text2);margin-bottom:18px">Across sessions, these flows were completed without confusion or assistance.</p>
+    <div class="worked-grid">
+      <div class="w-chip"><p class="w-name">Airtime</p><p class="w-desc">Quick to complete on both routes; Route 2 felt faster.</p></div>
+      <div class="w-chip"><p class="w-name">Data</p><p class="w-desc">Plan selection and purchase finished without hesitation.</p></div>
+      <div class="w-chip"><p class="w-name">Electricity</p><p class="w-desc">Core path worked, aside from confirmation gaps.</p></div>
+      <div class="w-chip"><p class="w-name">Transaction history</p><p class="w-desc">Easy to browse and find past transactions.</p></div>
+      <div class="w-chip"><p class="w-name">Parts of transfer</p><p class="w-desc">Confirmation screen helped users verify recipient before paying.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── KEY FINDINGS BAND ──────────────────────────────────────────────────── -->
+<div class="band" id="findings">
+  <div class="band-num">03</div>
+  <div class="wrap" style="position:relative;z-index:1">
+    <p class="s-label">Section 03</p>
+    <h2 class="s-title">Key findings</h2>
+    <p class="s-desc">Seven patterns that showed up across sessions — what users did, what they said, and why it matters for V2 direction.</p>
+  </div>
+</div>
+
+<!-- ── FINDINGS ───────────────────────────────────────────────────────────── -->
+<section class="sec">
+  <div class="wrap">
+    <div class="findings-stack">
+
+      <div class="finding">
+        <div class="f-head">
+          <div class="f-head-text">
+            <p class="f-tag">Key Finding 01 · 1 of 7</p>
+            <h3 class="f-title">Route 2 was preferred for airtime and transfers</h3>
+          </div>
+        </div>
+        <div class="f-body">
+          <div class="f-col">
+            <p class="f-col-label">What users did</p>
+            <p class="f-text">When asked to compare two route options for airtime and transfer, most participants picked Route 2. They said it felt faster, more flexible, and required less manual entry.</p>
+          </div>
+          <div class="f-col">
+            <p class="f-col-label">Evidence from sessions</p>
+            <ul class="ev-list">
+              <li>One participant preferred Route 2 for airtime — cited "flexibility and cross-selling."</li>
+              <li>Another preferred Route 2 for both airtime and transfer.</li>
+              <li>A third called Route 2 an "easy, choice flow."</li>
+              <li>One liked that the history screen exposed previous transactions.</li>
+            </ul>
+          </div>
+          <div class="f-col">
+            <p class="f-col-label">Why it matters</p>
+            <p class="why-text">Route 2 reduces effort and gives users more confidence selecting recipients. The structure still needs to make clear what each option is and why it's being shown.</p>
+          </div>
+        </div>
+        <div class="f-screens">
+          <div class="f-screens-vs">
+            <img src="report-images/screen-8a.png" alt="Route option A screen">
+            <span class="vs-label">vs</span>
+            <img src="report-images/screen-8b.png" alt="Route option B screen">
+          </div>
+        </div>
+      </div>
+
+      <div class="finding">
+        <div class="f-head">
+          <div class="f-head-text">
+            <p class="f-tag">Key Finding 02 · 2 of 7</p>
+            <h3 class="f-title">Copy and feedback mismatches caused confusion</h3>
+          </div>
+        </div>
+        <div class="f-body">
+          <div class="f-col">
+            <p class="f-col-label">What users did</p>
+            <p class="f-text">Participants noticed CTAs and success messages that referenced the wrong service.</p>
+          </div>
+          <div class="f-col">
+            <p class="f-col-label">Evidence from sessions</p>
+            <ul class="ev-list">
+              <li>Electricity flow: two participants both spotted a CTA copy mismatch.</li>
+              <li>Betting success message referenced power instead of wallet funding.</li>
+              <li>Two other participants saw the same betting success mismatch.</li>
+            </ul>
+          </div>
+          <div class="f-col">
+            <p class="f-col-label">Why it matters</p>
+            <p class="why-text">When users are moving money, mismatched copy makes them question whether the right transaction is being completed. It's avoidable, and it costs trust.</p>
+          </div>
+        </div>
+        <div class="f-screens">
+          <img src="report-images/screen-9.png" alt="Copy mismatch screen">
+        </div>
+      </div>
+
+      <div class="finding">
+        <div class="f-head">
+          <div class="f-head-text">
+            <p class="f-tag">Key Finding 03 · 3 of 7</p>
+            <h3 class="f-title">Users wanted stronger confirmation before paying</h3>
+          </div>
+        </div>
+        <div class="f-body">
+          <div class="f-col">
+            <p class="f-col-label">What users did</p>
+            <p class="f-text">Participants looked for a way to verify recipient or account details before committing to a payment — especially in electricity and transfer.</p>
+          </div>
+          <div class="f-col">
+            <p class="f-col-label">Evidence from sessions</p>
+            <ul class="ev-list">
+              <li>One participant liked the transfer confirmation screen because it confirmed recipient details.</li>
+              <li>Another: no way to confirm the recipient's name in the electricity flow.</li>
+              <li>A third flagged the same issue in electricity.</li>
+              <li>One suggested the form should auto-load account name after the meter number.</li>
+            </ul>
+          </div>
+          <div class="f-col">
+            <p class="f-col-label">Why it matters</p>
+            <p class="why-text">Without confirmation, users hesitate or risk paying the wrong account. Payment errors are high-cost; a single confirmation step prevents most of them.</p>
+          </div>
+        </div>
+        <div class="f-screens">
+          <img src="report-images/screen-10.png" alt="Confirmation screen">
+        </div>
+      </div>
+
+      <div class="finding">
+        <div class="f-head">
+          <div class="f-head-text">
+            <p class="f-tag">Key Finding 04 · 4 of 7</p>
+            <h3 class="f-title">Top beneficiaries didn't look like people</h3>
+          </div>
+        </div>
+        <div class="f-body">
+          <div class="f-col">
+            <p class="f-col-label">What users did</p>
+            <p class="f-text">The top beneficiaries section read as a list of banks or bank accounts — not as the people the user had recently sent money to.</p>
+          </div>
+          <div class="f-col">
+            <p class="f-col-label">Evidence from sessions</p>
+            <ul class="ev-list">
+              <li>"Hard to find, the list looked like a list of banks."</li>
+              <li>A second participant: same observation.</li>
+              <li>A third: same experience.</li>
+            </ul>
+          </div>
+          <div class="f-col">
+            <p class="f-col-label">Why it matters</p>
+            <p class="why-text">A shortcut feature loses its value if users don't recognise it. Recipient names should lead; the bank should be supporting detail.</p>
+          </div>
+        </div>
+        <div class="f-screens">
+          <img src="report-images/screen-12.png" alt="Top beneficiaries screen">
+        </div>
+      </div>
+
+      <div class="finding">
+        <div class="f-head">
+          <div class="f-head-text">
+            <p class="f-tag">Key Finding 05 · 5 of 7</p>
+            <h3 class="f-title">AI-assisted transfer raised trust and security concerns</h3>
+          </div>
+        </div>
+        <div class="f-body">
+          <div class="f-col">
+            <p class="f-col-label">What users did</p>
+            <p class="f-text">Participants questioned how the AI knew who to send money to, and what would happen if their phone was lost or used by someone else.</p>
+          </div>
+          <div class="f-col">
+            <p class="f-col-label">Evidence from sessions</p>
+            <ul class="ev-list">
+              <li>AI appeared to provide a beneficiary even though the participant hadn't selected one.</li>
+              <li>The same participant asked what protects them if the phone is stolen, or against an impostor.</li>
+              <li>That participant still liked AI transfer and scheduled transfer as ideas.</li>
+            </ul>
+          </div>
+          <div class="f-col">
+            <p class="f-col-label">Why it matters</p>
+            <p class="why-text">The idea is interesting, but the current flow doesn't explain enough. Without visible controls and confirmation, users may dismiss it as risky.</p>
+          </div>
+        </div>
+        <div class="f-screens">
+          <img src="report-images/screen-13.png" alt="AI-assisted transfer screen">
+        </div>
+      </div>
+
+      <div class="finding">
+        <div class="f-head">
+          <div class="f-head-text">
+            <p class="f-tag">Key Finding 06 · 6 of 7</p>
+            <h3 class="f-title">Bank statement was useful, but not discoverable</h3>
+          </div>
+        </div>
+        <div class="f-body">
+          <div class="f-col">
+            <p class="f-col-label">What users did</p>
+            <p class="f-text">One participant first looked for bank statements on the More screen rather than next to the transfer CTA where the entry point lives.</p>
+          </div>
+          <div class="f-col">
+            <p class="f-col-label">Evidence from sessions</p>
+            <ul class="ev-list">
+              <li>Once shown the icon, they found it easy to use.</li>
+              <li>Another liked that statement was tied to transactions — unlike a comparable bank app.</li>
+              <li>The same participant wanted to download from the app, not only by email.</li>
+              <li>They also wanted a share button — specifically for WhatsApp.</li>
+              <li>A third liked the custom range option.</li>
+            </ul>
+          </div>
+          <div class="f-col">
+            <p class="f-col-label">Why it matters</p>
+            <p class="why-text">The feature has clear value, but a hidden entry point and email-only output don't match how users want to use it.</p>
+          </div>
+        </div>
+        <div class="f-screens">
+          <img src="report-images/screen-14a.png" alt="Bank statement entry screen">
+          <img src="report-images/screen-14b.png" alt="Bank statement screen">
+        </div>
+      </div>
+
+      <div class="finding">
+        <div class="f-head">
+          <div class="f-head-text">
+            <p class="f-tag">Key Finding 07 · 7 of 7</p>
+            <h3 class="f-title">PIN length was inconsistent across flows</h3>
+          </div>
+        </div>
+        <div class="f-body">
+          <div class="f-col">
+            <p class="f-col-label">What users did</p>
+            <p class="f-text">A participant noticed that the transaction PIN for bank statement was 6 digits, while bill payment and transfer flows used 4 digits.</p>
+          </div>
+          <div class="f-col">
+            <p class="f-col-label">Evidence from sessions</p>
+            <ul class="ev-list">
+              <li>6-digit PIN for statement; 4-digit PIN for bills.</li>
+              <li>They questioned whether the difference was intentional or an error.</li>
+            </ul>
+          </div>
+          <div class="f-col">
+            <p class="f-col-label">Why it matters</p>
+            <p class="why-text">Inconsistent PIN patterns make users pause and second-guess the flow. Either align the lengths, or explain the difference where it appears.</p>
+          </div>
+        </div>
+        <div class="f-screens">
+          <img src="report-images/screen-15a.png" alt="4-digit PIN screen">
+          <img src="report-images/screen-15b.png" alt="6-digit PIN screen">
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── PRIORITY ISSUES BAND ───────────────────────────────────────────────── -->
+<div class="band" id="issues">
+  <div class="band-num">04</div>
+  <div class="wrap" style="position:relative;z-index:1">
+    <p class="s-label">Section 04</p>
+    <h2 class="s-title">Priority issues</h2>
+    <p class="s-desc">Ten issues, ranked by impact on task completion. Critical items block users from finishing what they came to do.</p>
+  </div>
+</div>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="issues-grid">
+      <div class="i-col crit">
+        <div class="i-head">
+          <span class="i-col-title">Critical · 2</span>
+          <span class="i-col-tag">Blocks task completion</span>
+        </div>
+        <ul class="i-list">
+          <li class="i-item">
+            <p class="i-name">Copy and feedback mismatch in electricity &amp; betting</p>
+            <p class="i-why">Users may question whether they're paying for the right thing.</p>
+          </li>
+          <li class="i-item">
+            <p class="i-name">Stuck state in Route 2 transfer</p>
+            <p class="i-why">Users may not know the next step without assistance.</p>
+          </li>
+        </ul>
+      </div>
+      <div class="i-col maj">
+        <div class="i-head">
+          <span class="i-col-title">Major · 4</span>
+          <span class="i-col-tag">Causes confusion or delays</span>
+        </div>
+        <ul class="i-list">
+          <li class="i-item">
+            <p class="i-name">No recipient confirmation in electricity</p>
+            <p class="i-why">Payment errors are high-risk; users need confidence before confirming.</p>
+          </li>
+          <li class="i-item">
+            <p class="i-name">Top beneficiaries not visually clear</p>
+            <p class="i-why">A shortcut feature loses value if users don't understand it quickly.</p>
+          </li>
+          <li class="i-item">
+            <p class="i-name">AI transfer needs clearer control &amp; security</p>
+            <p class="i-why">Users may reject the feature if it feels unsafe or too automatic.</p>
+          </li>
+          <li class="i-item">
+            <p class="i-name">Bank statement access not discoverable</p>
+            <p class="i-why">Users may miss the feature even if it's useful.</p>
+          </li>
+        </ul>
+      </div>
+      <div class="i-col min">
+        <div class="i-head">
+          <span class="i-col-title">Minor · 3</span>
+          <span class="i-col-tag">Friction but not blocking</span>
+        </div>
+        <ul class="i-list">
+          <li class="i-item">
+            <p class="i-name">PIN length inconsistency</p>
+            <p class="i-why">May cause hesitation or input errors.</p>
+          </li>
+          <li class="i-item">
+            <p class="i-name">Download / share missing from statement</p>
+            <p class="i-why">Output may not match how users want to use it.</p>
+          </li>
+          <li class="i-item">
+            <p class="i-name">Electricity downtime feedback</p>
+            <p class="i-why">Users need to know if it's the app, provider, or network — similar to a bank monitor feature.</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── RECOMMENDATIONS BAND ───────────────────────────────────────────────── -->
+<div class="band" id="recommendations">
+  <div class="band-num">05</div>
+  <div class="wrap" style="position:relative;z-index:1">
+    <p class="s-label">Section 05</p>
+    <h2 class="s-title">Recommendations</h2>
+    <p class="s-desc">Specific actions tied to findings.</p>
+  </div>
+</div>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="recs-group">
+      <div class="rg-head">
+        <span class="rg-badge now">Fix Now</span>
+        <span class="rg-title">Before the next iteration</span>
+      </div>
+      <div class="recs-grid">
+        <div class="rec">
+          <p class="rec-n">01</p>
+          <p class="rec-title">Fix all mismatched copy and success feedback</p>
+          <ul class="rec-list">
+            <li>Betting CTA must not reference power.</li>
+            <li>Betting success message confirms wallet funding.</li>
+            <li>Electricity CTA matches electricity payment.</li>
+            <li>Success messages name the exact service completed.</li>
+          </ul>
+        </div>
+        <div class="rec">
+          <p class="rec-n">02</p>
+          <p class="rec-title">Show recipient/account confirmation before payment</p>
+          <ul class="rec-list">
+            <li>Electricity: meter type → meter number → auto-loaded account name → amount → confirm.</li>
+            <li>Block payment until the confirmed account name is visible.</li>
+          </ul>
+        </div>
+        <div class="rec">
+          <p class="rec-n">03</p>
+          <p class="rec-title">Make "Add new beneficiary" easy to find</p>
+          <ul class="rec-list">
+            <li>Clear button next to the list/search.</li>
+            <li>Avoid icon-only treatments for this action.</li>
+            <li>Verify the action completes in prototype and final build.</li>
+          </ul>
+        </div>
+        <div class="rec">
+          <p class="rec-n">04</p>
+          <p class="rec-title">Redesign top beneficiaries to look like people</p>
+          <ul class="rec-list">
+            <li>Lead with recipient name; bank and account are supporting details.</li>
+            <li>Use initials or avatar placeholders.</li>
+            <li>Label the section — e.g. "People you send to often."</li>
+          </ul>
+        </div>
+        <div class="rec">
+          <p class="rec-n">05</p>
+          <p class="rec-title">Add clearer checks to AI-assisted transfer</p>
+          <ul class="rec-list">
+            <li>Require explicit user confirmation before PIN.</li>
+            <li>Reassure that transfers still need user approval.</li>
+            <li>Never auto-select a beneficiary without a visible reason.</li>
+          </ul>
+        </div>
+        <div class="rec">
+          <p class="rec-n">06</p>
+          <p class="rec-title">Fix confusing input states in Route 2 transfer</p>
+          <ul class="rec-list">
+            <li>Don't show the keyboard unless the user needs to type.</li>
+            <li>Make the check/continue button more visible.</li>
+            <li>Add "Review details" or "Confirm recipient" before PIN.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="recs-group">
+      <div class="rg-head">
+        <span class="rg-badge next">Fix Next</span>
+        <span class="rg-title">Schedule for follow-up</span>
+      </div>
+      <div class="recs-grid">
+        <div class="rec">
+          <p class="rec-n">07</p>
+          <p class="rec-title">Improve bank statement discoverability</p>
+          <ul class="rec-list">
+            <li>Keep statement access near transactions.</li>
+            <li>Add a second entry under More or Account.</li>
+            <li>Use a clear label — "Request bank statement."</li>
+            <li>Don't rely on an icon alone.</li>
+          </ul>
+        </div>
+        <div class="rec">
+          <p class="rec-n">08</p>
+          <p class="rec-title">Add download and share options for statements</p>
+          <ul class="rec-list">
+            <li>Download statement.</li>
+            <li>Share statement.</li>
+            <li>Send to email.</li>
+            <li>Add WhatsApp sharing — specifically requested.</li>
+          </ul>
+        </div>
+        <div class="rec">
+          <p class="rec-n">09</p>
+          <p class="rec-title">Confirm whether PIN length should be 4 or 6 digits</p>
+          <ul class="rec-list">
+            <li>If 6 digits is intentional, explain why in the flow.</li>
+            <li>If not, align with the existing 4-digit pattern.</li>
+            <li>Don't switch PIN expectations without explanation.</li>
+          </ul>
+        </div>
+        <div class="rec">
+          <p class="rec-n">10</p>
+          <p class="rec-title">Add service downtime feedback</p>
+          <ul class="rec-list">
+            <li>Show a clear downtime message.</li>
+            <li>Say whether the issue is temporary.</li>
+            <li>Tell users what to do next — e.g. retry later.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── NEXT STEPS BAND ────────────────────────────────────────────────────── -->
+<div class="band" id="next-steps">
+  <div class="band-num">06</div>
+  <div class="wrap" style="position:relative;z-index:1">
+    <p class="s-label">Section 06 — Closing</p>
+    <h2 class="s-title">Recommended next steps</h2>
+    <p class="s-desc">Before the next design iteration, the team should focus on these four moves — in this order.</p>
+  </div>
+</div>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="ns-grid">
+      <div class="ns-card">
+        <span class="ns-n">01</span>
+        <div>
+          <p class="ns-ttl">Resolve copy and confirmation gaps</p>
+          <p class="ns-desc">Fix every mismatched CTA and success message in electricity and betting. Add recipient/account confirmation before payment in electricity and transfer.</p>
+        </div>
+      </div>
+      <div class="ns-card">
+        <span class="ns-n">02</span>
+        <div>
+          <p class="ns-ttl">Redesign top beneficiaries in transfer</p>
+          <p class="ns-desc">Redesign top beneficiaries so they read as people, not banks — lead with recipient name and avatar.</p>
+        </div>
+      </div>
+      <div class="ns-card">
+        <span class="ns-n">03</span>
+        <div>
+          <p class="ns-ttl">Make AI-assisted transfer feel safe</p>
+          <p class="ns-desc">Require explicit confirmation. Don't pre-fill a beneficiary without a visible reason.</p>
+        </div>
+      </div>
+      <div class="ns-card">
+        <span class="ns-n">04</span>
+        <div>
+          <p class="ns-ttl">Re-test with the prototype gaps closed</p>
+          <p class="ns-desc">Wire up "Select from contact," correct input states in Route 2 transfer, and re-run the same flows with two new participants.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Credit Direct · V2 Mobile App Usability Testing Report · Prepared by Martha Adeleke</p>
+  </div>
+</footer>
+
+<script>
+// Progress bar
+const bar = document.getElementById('bar');
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  bar.style.width = pct + '%';
+}, { passive: true });
+
+// Active nav
+const links = document.querySelectorAll('.nav-links a');
+const targets = [...document.querySelectorAll('section[id], div.band[id]')];
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => {
+        l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id);
+      });
+    }
+  });
+}, { rootMargin: '-35% 0px -55% 0px' });
+targets.forEach(t => obs.observe(t));
+</script>
+</body>
+</html>
