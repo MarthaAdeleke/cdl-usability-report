@@ -275,6 +275,28 @@ nav{
   font-size:11px;font-weight:900;letter-spacing:.14em;
   color:var(--text3);text-transform:uppercase;flex-shrink:0;
 }
+.proto-links{
+  display:flex;flex-wrap:wrap;gap:10px;
+  padding:16px 30px;border-top:1px solid var(--border);
+  background:var(--surface);align-items:center;
+}
+.proto-links-label{
+  font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text3);margin-right:4px;flex-shrink:0;
+}
+.proto-group{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.proto-divider{
+  width:1px;height:20px;background:var(--border);margin:0 6px;flex-shrink:0;
+}
+a.proto-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 12px;border-radius:6px;text-decoration:none;
+  font-size:12px;font-weight:600;letter-spacing:.01em;
+  background:var(--accent-bg);border:1px solid var(--accent-border);
+  color:var(--accent);transition:background .15s,border-color .15s;
+}
+a.proto-btn:hover{background:rgba(74,172,225,.14);border-color:rgba(74,172,225,.3);}
+a.proto-btn svg{flex-shrink:0;}
 .finding{
   background:var(--card);border:1px solid var(--border);
   border-radius:16px;overflow:hidden;
@@ -597,6 +619,32 @@ footer p{font-size:12px;color:var(--text3);font-weight:500}
             <img src="report-images/screen-8a.png" alt="Route option A screen">
             <span class="vs-label">vs</span>
             <img src="report-images/screen-8b.png" alt="Route option B screen">
+          </div>
+        </div>
+        <div class="proto-links">
+          <span class="proto-links-label">View prototypes</span>
+          <div class="proto-group">
+            <span class="proto-links-label" style="font-size:10px;margin-right:0">Transfer</span>
+            <a class="proto-btn" href="https://www.figma.com/proto/W4VprJqJrOaq6R0v19SPSs/V2-Mobile-App-Design?node-id=325-40248&viewport=-739%2C578%2C0.21&t=7bDczuLJsaumkBRG-9&scaling=scale-down&content-scaling=fixed&starting-point-node-id=325%3A40248&show-proto-sidebar=1&page-id=1%3A5" target="_blank" rel="noopener">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Route 1
+            </a>
+            <a class="proto-btn" href="https://www.figma.com/proto/W4VprJqJrOaq6R0v19SPSs/V2-Mobile-App-Design?node-id=3346-85912&viewport=-739%2C578%2C0.21&t=7bDczuLJsaumkBRG-9&scaling=scale-down&content-scaling=fixed&starting-point-node-id=3346%3A85912&show-proto-sidebar=1&page-id=1%3A5" target="_blank" rel="noopener">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Route 2
+            </a>
+          </div>
+          <div class="proto-divider"></div>
+          <div class="proto-group">
+            <span class="proto-links-label" style="font-size:10px;margin-right:0">Airtime</span>
+            <a class="proto-btn" href="https://www.figma.com/proto/W4VprJqJrOaq6R0v19SPSs/V2-Mobile-App-Design?node-id=342-15379&viewport=-970%2C-506%2C0.35&t=4YoV2T20kRqIxrhq-9&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=342%3A15379&show-proto-sidebar=1&page-id=1%3A8" target="_blank" rel="noopener">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Route 1
+            </a>
+            <a class="proto-btn" href="https://www.figma.com/proto/W4VprJqJrOaq6R0v19SPSs/V2-Mobile-App-Design?node-id=342-15381&viewport=-970%2C-506%2C0.35&t=4YoV2T20kRqIxrhq-9&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=342%3A15381&show-proto-sidebar=1&page-id=1%3A8" target="_blank" rel="noopener">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Route 2
+            </a>
           </div>
         </div>
       </div>
